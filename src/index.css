@@ -1,0 +1,93 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: light;
+  --color-fondo: #fff;
+  --color-fondo-hover: #ececec;
+  --color-texto: #000;
+  --color-Celifrut: #7EBA27;        /* Verde principal */
+  --color-Celifrut-dark: #75ac23;   /* Verde más oscuro */
+  --color-Celifrut-brigth: #8ecc30; /* Verde más claro */
+  --border-Color: #e5e7eb;
+  
+  /* Nuevas variables para el inventario */
+  --color-card-bg: white;
+  --color-card-shadow: rgba(0, 0, 0, 0.1);
+  --color-input-bg: #f8f9fa;
+  --color-input-border: #e1e8ed;
+  --color-input-focus: #3498db;
+  --color-title: #2c3e50;
+  --color-subtitle: #34495e;
+  --color-text: #576574;
+  --color-border-accent: var(--color-Celifrut);
+
+  /* Stat card accent colors */
+  --color-stat-propias: #3b82f6;
+  --color-stat-propias-value: #2563eb;
+  --color-stat-prestadas: #f97316;
+  --color-stat-prestadas-value: #ea580c;
+  --color-stat-llenas: #22c55e;
+  --color-stat-llenas-value: #16a34a;
+  --color-stat-vacias: #a855f7;
+  --color-stat-vacias-value: #9333ea;
+
+  --color-ListaEmpaqueTexto: rgb(59 130 246);
+  --color-ListaEmpaqueFondo: rgb(233, 240, 251);
+  --color-shadow: rgba(186, 186, 186, 1);
+  --color-predioCard-ordenVaciado: rgb(228, 236, 232);
+
+  --sombra--boton-menu: rgba(0, 0, 0, 0.35);
+
+  /* Table row tokens */
+  --color-table-row-even: #fbfbfb;
+  --color-table-row-odd: #dedfe0;
+  --color-table-row-total: #c8c8c8;
+
+  /* Semantic status colors */
+  --color-error: #dc2626;
+  --color-error-dark: #b91c1c;
+  --color-warning: #f59e0b;
+}
+
+.dark-theme {
+  color-scheme: dark;
+  --color-fondo: #090224;
+  --color-fondo-hover: #13044e;
+  --color-texto: #fff;
+  --color-ListaEmpaqueTexto: #fff;
+  --color-ListaEmpaqueFondo: rgb(54, 69, 94);
+  --color-shadow: rgb(92, 91, 96);
+  --color-predioCard-ordenVaciado: rgb(79, 88, 83);
+  --border-Color: #475569;
+  
+  /* Sobreescritura de variables para el inventario en modo oscuro */
+  --color-card-bg: #1a1f36;
+  --color-card-shadow: rgba(0, 0, 0, 0.3);
+  --color-input-bg: #141829;
+  --color-input-border: #2d3748;
+  --color-input-focus: var(--color-Celifrut);
+  --color-title: #e2e8f0;
+  --color-subtitle: #cbd5e1;
+  --color-text: #94a3b8;
+  --color-border-accent: var(--color-Celifrut);
+
+  /* Stat card value overrides for dark mode */
+  --color-stat-propias-value: #60a5fa;
+  --color-stat-prestadas-value: #fb923c;
+  --color-stat-llenas-value: #4ade80;
+  --color-stat-vacias-value: #c084fc;
+
+  --sombra--boton-menu: rgba(255, 255, 255, 0.35);
+
+  /* Table row tokens — dark mode */
+  --color-table-row-even: #0e1524;
+  --color-table-row-odd: #152030;
+  --color-table-row-total: #1e2a48;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+}
