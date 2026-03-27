@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import useAuthStore from '../store/useAuthStore'
+import { config } from '../config'
 
 interface VerifyResponse {
   // Ajusta según la respuesta real del servidor
@@ -37,10 +39,16 @@ function parseAndCleanURL(): ParsedParams {
   return { serial, token, parseError: null }
 }
 
+export function hasQRParams(): boolean {
+  const params = new URLSearchParams(window.location.search)
+  const tieneQR = params.has('serial') && window.location.hash.length > 1
+  return tieneQR
+}
+
 export function useVerifyQR(): VerifyState {
   // Lazy initializer: parsea y limpia la URL una sola vez antes del primer render
   const [{ serial, token, parseError }] = useState<ParsedParams>(parseAndCleanURL)
-
+  const { setIsLogin, setPersonal } = useAuthStore()
   const [state, setState] = useState<VerifyState>({
     isLoading: parseError === null,
     data: null,
@@ -53,32 +61,41 @@ export function useVerifyQR(): VerifyState {
 
     let cancelled = false
 
-    fetch(`${import.meta.env.VITE_API_URL}/talento_humano/verify`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ serial, token }),
-    })
-      .then(async (res) => {
-        if (!res.ok) {
+    const requestLogin = async () => {
+      try {
+        const response = await fetch(`${config.apiUrl}/talento_humano/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ serial, token }),
+        })
+        if (!response.ok) {
           const msg =
-            res.status === 401
+            response.status === 401
               ? 'No autorizado. Token inválido o expirado.'
-              : `Error del servidor (${res.status}).`
+              : `Error del servidor (${response.status}).`
           throw new Error(msg)
         }
-        return res.json() as Promise<VerifyResponse>
-      })
-      .then((data) => {
-        if (!cancelled) setState({ isLoading: false, data, error: null })
-      })
-      .catch((err: Error) => {
-        if (!cancelled) setState({ isLoading: false, data: null, error: err.message })
-      })
+        const data = await response.json()
+        if (!cancelled) {
+          setState({ isLoading: false, data, error: null })
+        }
+        setIsLogin(true)
+        setPersonal(data.personal)
+      } catch (err) {
+        if (err instanceof Error) {
+          if (!cancelled) {
+            setState({ isLoading: false, data: null, error: err.message })
+          }
+        }
+      }
+    }
 
+    requestLogin()
     return () => {
       cancelled = true
     }
-  }, [serial, token])
+  }, [serial, token, setIsLogin, setPersonal])
 
   return state
 }
