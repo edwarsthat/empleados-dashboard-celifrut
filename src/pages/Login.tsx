@@ -1,9 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styles from '../styles/Login.module.css'
 import { useCameraScanStore } from '../store/useCameraScanStore'
-import ScanQr from '../components/ScanQr'
 import { useVerifyQR } from '../hooks/useVerifyQR'
+
+const ScanQr = lazy(() => import('../components/ScanQr'))
 
 export default function Login() {
   const navigate  = useNavigate()
@@ -149,7 +150,7 @@ export default function Login() {
 
       </div>
 
-      <ScanQr />
+      <Suspense><ScanQr /></Suspense>
     </>
   )
 }
