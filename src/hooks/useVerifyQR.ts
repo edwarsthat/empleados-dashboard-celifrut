@@ -19,11 +19,11 @@ interface ParsedParams {
   parseError: string | null
 }
 
-function parseAndCleanURL(): ParsedParams {
-  const params = new URLSearchParams(window.location.search)
+function parseAndCleanURL(url: string | null): ParsedParams {
+  const parsed = url ? new URL(url) : null
+  const params = parsed ? parsed.searchParams : new URLSearchParams(window.location.search)
   const serialRaw = params.get('serial')
-  const token = window.location.hash.slice(1) // elimina el '#'
-
+  const token = parsed ? parsed.hash.slice(1) : window.location.hash.slice(1)
   // Limpiar el fragmento del historial inmediatamente
   window.history.replaceState(null, '', window.location.pathname + window.location.search)
 
@@ -35,7 +35,6 @@ function parseAndCleanURL(): ParsedParams {
   if (isNaN(serial)) {
     return { serial: null, token: null, parseError: 'El serial no es un número válido.' }
   }
-
   return { serial, token, parseError: null }
 }
 
@@ -45,20 +44,25 @@ export function hasQRParams(): boolean {
   return tieneQR
 }
 
-export function useVerifyQR(): VerifyState {
-  // Lazy initializer: parsea y limpia la URL una sola vez antes del primer render
-  const [{ serial, token, parseError }] = useState<ParsedParams>(parseAndCleanURL)
+export function useVerifyQR(url: string | null = null): VerifyState {
   const { setIsLogin, setPersonal } = useAuthStore()
   const [state, setState] = useState<VerifyState>({
-    isLoading: parseError === null,
+    isLoading: false,
     data: null,
-    error: parseError,
+    error: null,
   })
 
   useEffect(() => {
-    // Si hubo error de parseo, no hay nada que fetchear
-    if (serial === null || token === null) return
+    if (!url) return
 
+    const { serial, token, parseError } = parseAndCleanURL(url)
+
+    if (parseError || serial === null || token === null) {
+      setState({ isLoading: false, data: null, error: parseError })
+      return
+    }
+
+    setState({ isLoading: true, data: null, error: null })
     let cancelled = false
 
     const requestLogin = async () => {
@@ -79,23 +83,19 @@ export function useVerifyQR(): VerifyState {
         const data = await response.json()
         if (!cancelled) {
           setState({ isLoading: false, data, error: null })
+          setIsLogin(true)
+          setPersonal(data.personal)
         }
-        setIsLogin(true)
-        setPersonal(data.personal)
       } catch (err) {
-        if (err instanceof Error) {
-          if (!cancelled) {
-            setState({ isLoading: false, data: null, error: err.message })
-          }
+        if (!cancelled && err instanceof Error) {
+          setState({ isLoading: false, data: null, error: err.message })
         }
       }
     }
 
     requestLogin()
-    return () => {
-      cancelled = true
-    }
-  }, [serial, token, setIsLogin, setPersonal])
+    return () => { cancelled = true }
+  }, [url, setIsLogin, setPersonal])
 
   return state
 }

@@ -5,11 +5,10 @@ import { useAuth } from './hooks/useAuth'
 import useAuthStore from './store/useAuthStore'
 
 function QRFlow() {
-  const { isLoading, error, data } = useVerifyQR()
+  const { isLoading, error } = useVerifyQR()
   if (isLoading) return <p>Verificando...</p>
   if (error) return <Navigate to="/login" replace />
 
-  console.log(data)
   return <ProfilePage />
 }
 
