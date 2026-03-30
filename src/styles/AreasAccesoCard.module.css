@@ -1,0 +1,70 @@
+.card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--border-Color);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px var(--color-card-shadow);
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+.title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-title);
+  margin: 0 0 16px;
+  letter-spacing: -0.1px;
+}
+
+.empty {
+  font-size: 13px;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--color-input-bg);
+  border: 1px solid var(--color-input-border);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-Celifrut);
+  flex-shrink: 0;
+}
+
+.itemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.nombre {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-subtitle);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sede {
+  font-size: 11px;
+  color: var(--color-text);
+}

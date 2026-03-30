@@ -91,3 +91,153 @@ body {
   margin: 0;
   font-family: system-ui, sans-serif;
 }
+
+/* ── ScanQr ──────────────────────────────────────────── */
+.scanqr-dialog {
+  position: relative;
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-input-border);
+  border-radius: 16px;
+  padding: 0;
+  width: min(480px, 94vw);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.scanqr-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.scanqr-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid var(--color-input-border);
+}
+
+.scanqr-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-title);
+  letter-spacing: -0.2px;
+}
+
+.scanqr-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.scanqr-close svg {
+  width: 16px;
+  height: 16px;
+}
+
+.scanqr-close:hover {
+  background: var(--color-fondo-hover);
+  color: var(--color-texto);
+}
+
+.scanqr-body {
+  padding: 20px;
+}
+
+.scanqr-video-wrapper {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+  min-height: 320px;
+}
+
+/* html5-qrcode inyecta su propio div; lo forzamos a llenar el wrapper */
+.scanqr-container {
+  width: 100%;
+  min-height: 320px;
+}
+
+.scanqr-container > video {
+  width: 100% !important;
+  height: auto !important;
+  display: block;
+}
+
+/* Línea guía para código de barras */
+.scanqr-barcode-line {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: color-mix(in srgb, var(--color-Celifrut) 80%, transparent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-Celifrut) 60%, transparent);
+  transform: translateY(-50%);
+  pointer-events: none;
+  animation: scanqr-sweep 2s ease-in-out infinite;
+}
+
+@keyframes scanqr-sweep {
+  0%, 100% { top: 35%; opacity: 1; }
+  50%       { top: 65%; opacity: 0.7; }
+}
+
+/* Estado de error */
+.scanqr-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.scanqr-error-icon {
+  width: 40px;
+  height: 40px;
+  color: var(--color-error);
+}
+
+.scanqr-error p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.scanqr-retry {
+  padding: 9px 20px;
+  background: var(--color-Celifrut);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.scanqr-retry:hover {
+  background: var(--color-Celifrut-dark);
+}
+
+/* Hint inferior */
+.scanqr-hint {
+  margin: 0;
+  padding: 12px 20px 18px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-text);
+  border-top: 1px solid var(--color-input-border);
+}

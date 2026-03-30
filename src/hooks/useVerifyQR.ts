@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import useAuthStore from '../store/useAuthStore'
+import { config } from '../config'
 
 interface VerifyResponse {
   // Ajusta según la respuesta real del servidor
@@ -17,11 +19,11 @@ interface ParsedParams {
   parseError: string | null
 }
 
-function parseAndCleanURL(): ParsedParams {
-  const params = new URLSearchParams(window.location.search)
+function parseAndCleanURL(url: string | null): ParsedParams {
+  const parsed = url ? new URL(url) : null
+  const params = parsed ? parsed.searchParams : new URLSearchParams(window.location.search)
   const serialRaw = params.get('serial')
-  const token = window.location.hash.slice(1) // elimina el '#'
-
+  const token = parsed ? parsed.hash.slice(1) : window.location.hash.slice(1)
   // Limpiar el fragmento del historial inmediatamente
   window.history.replaceState(null, '', window.location.pathname + window.location.search)
 
@@ -33,52 +35,67 @@ function parseAndCleanURL(): ParsedParams {
   if (isNaN(serial)) {
     return { serial: null, token: null, parseError: 'El serial no es un número válido.' }
   }
-
   return { serial, token, parseError: null }
 }
 
-export function useVerifyQR(): VerifyState {
-  // Lazy initializer: parsea y limpia la URL una sola vez antes del primer render
-  const [{ serial, token, parseError }] = useState<ParsedParams>(parseAndCleanURL)
+export function hasQRParams(): boolean {
+  const params = new URLSearchParams(window.location.search)
+  const tieneQR = params.has('serial') && window.location.hash.length > 1
+  return tieneQR
+}
 
+export function useVerifyQR(url: string | null = null): VerifyState {
+  const { setIsLogin, setPersonal } = useAuthStore()
   const [state, setState] = useState<VerifyState>({
-    isLoading: parseError === null,
+    isLoading: false,
     data: null,
-    error: parseError,
+    error: null,
   })
 
   useEffect(() => {
-    // Si hubo error de parseo, no hay nada que fetchear
-    if (serial === null || token === null) return
+    if (!url) return
 
+    const { serial, token, parseError } = parseAndCleanURL(url)
+
+    if (parseError || serial === null || token === null) {
+      setState({ isLoading: false, data: null, error: parseError })
+      return
+    }
+
+    setState({ isLoading: true, data: null, error: null })
     let cancelled = false
 
-    fetch(`${import.meta.env.VITE_API_URL}/talento_humano/verify`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ serial, token }),
-    })
-      .then(async (res) => {
-        if (!res.ok) {
+    const requestLogin = async () => {
+      try {
+        const response = await fetch(`${config.apiUrl}/talento_humano/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ serial, token }),
+        })
+        if (!response.ok) {
           const msg =
-            res.status === 401
+            response.status === 401
               ? 'No autorizado. Token inválido o expirado.'
-              : `Error del servidor (${res.status}).`
+              : `Error del servidor (${response.status}).`
           throw new Error(msg)
         }
-        return res.json() as Promise<VerifyResponse>
-      })
-      .then((data) => {
-        if (!cancelled) setState({ isLoading: false, data, error: null })
-      })
-      .catch((err: Error) => {
-        if (!cancelled) setState({ isLoading: false, data: null, error: err.message })
-      })
-
-    return () => {
-      cancelled = true
+        const data = await response.json()
+        if (!cancelled) {
+          setState({ isLoading: false, data, error: null })
+          setIsLogin(true)
+          setPersonal(data.personal)
+        }
+      } catch (err) {
+        if (!cancelled && err instanceof Error) {
+          setState({ isLoading: false, data: null, error: err.message })
+        }
+      }
     }
-  }, [serial, token])
+
+    requestLogin()
+    return () => { cancelled = true }
+  }, [url, setIsLogin, setPersonal])
 
   return state
 }

@@ -271,6 +271,43 @@
   box-shadow: 0 2px 8px rgba(126, 186, 39, 0.3);
 }
 
+/* QR Button */
+.qrButton {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: var(--color-texto);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  border: 1.5px solid var(--color-input-border);
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  letter-spacing: 0.1px;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  margin-bottom: 24px;
+}
+
+.qrButton:hover {
+  border-color: var(--color-Celifrut);
+  color: var(--color-Celifrut);
+  background: color-mix(in srgb, var(--color-Celifrut) 6%, transparent);
+}
+
+.qrButton:active {
+  background: color-mix(in srgb, var(--color-Celifrut) 12%, transparent);
+}
+
+.qrIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
 /* Divider */
 .divider {
   display: flex;
