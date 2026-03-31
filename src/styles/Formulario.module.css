@@ -1,0 +1,106 @@
+.formContainer {
+    /* background: #ffffff; */
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    max-width: 1000px;
+    margin: 20px auto;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #a8bbeb; 
+    background: -moz-linear-gradient(left, #a0b5eb 0%, #c9f0e4 100%); 
+    background: -webkit-linear-gradient(left, #a0b5eb 0%,#c9f0e4 100%); 
+    background: linear-gradient(to right, #a0b5eb 0%,#c9f0e4 100%); 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a0b5eb', endColorstr='#c9f0e4',GradientType=1 ); 
+}
+
+/* Encabezados de sección con una línea decorativa */
+.sectionTitle {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 35px 0 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sectionTitle::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background: #75ac23;
+    margin-right: 12px;
+    border-radius: 2px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas en desktop */
+    gap: 25px;
+}
+
+/* Responsivo para tablets y celulares */
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #4a5568;
+    margin-left: 2px;
+}
+
+/* Estilo de Inputs y Selects */
+.input, .select {
+    padding: 10px 14px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #2d3748;
+    background-color: #f7fafc;
+    transition: all 0.2s ease-in-out;
+}
+
+.input:hover, .select:hover {
+    border-color: #a0aec0;
+}
+
+.input:focus, .select:focus {
+    outline: none;
+    border-color: #7EBA27;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px #75ac23;
+}
+
+/* Botón de envío con gradiente sutil */
+.submitBtn {
+    margin-top: 50px;
+    width: auto;
+    padding: 16px;
+    background: linear-gradient(135deg, #7EBA27 0%, #75ac23 100%);
+    color: gainsboro;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(26, 54, 93, 0.25);
+    transition: transform 0.1s active, box-shadow 0.2s;
+}
+
+.submitBtn:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 6px 15px rgba(26, 54, 93, 0.35);
+}
+
+.submitBtn:active {
+    transform: scale(0.98);
+}
