@@ -53,7 +53,7 @@ export function useVerifyQR(url: string | null = null): VerifyState {
   })
 
   useEffect(() => {
-    if (!url) return
+    // if (!url) return
 
     const { serial, token, parseError } = parseAndCleanURL(url)
 
