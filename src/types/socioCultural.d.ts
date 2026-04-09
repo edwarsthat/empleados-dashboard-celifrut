@@ -1,0 +1,30 @@
+export interface SocioculturalData {
+    tipoDocumento: 'TI' | 'CC' | 'CE' | 'PPT' | '';
+    nroDocumento: string;
+    genero: 'Masculino' | 'Femenino' | 'Indefinido' | '';
+    nacionalidad: string;
+    fechaNacimiento: string;
+    rh: string;
+    raza: string;
+    eps: string;
+    pensiones: string;
+    cesantias: string;
+    celular: string;
+    correo: string;
+    escolaridad: string;
+    tituloObtenido: string;
+    departamento: string;
+    ciudad: string;
+    tipoVivienda: string;
+    direccion: string;
+    estrato: number | '';
+    personasACargo: string;
+    vulnerabilidad: string;
+    orientacionSexual: string;
+    pertenenciaEtnica: string;
+    contactoEmergenciaNombre: string;
+    contactoEmergenciaParentesco: string;
+    contactoEmergenciaTelefono: string;
+    tieneVehiculo: string;
+    estadoCivil: string;
+}
