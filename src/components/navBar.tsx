@@ -7,12 +7,18 @@ import useAuthStore from '../store/useAuthStore'
 export default function NavBar() {
   const [darkMode, setDarkMode] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false) // Nuevo estado para el perfil
   const { personal } = useAuthStore()
 
   useEffect(() => {
     document.body.classList.toggle('dark-theme', darkMode)
   }, [darkMode])
 
+  // Función para cerrar el dropdown al hacer click en un link
+  const closeDropdowns = () => {
+    setUserDropdownOpen(false)
+    setMenuOpen(false)
+  }
 
   return (
     <>
@@ -51,18 +57,42 @@ export default function NavBar() {
 
             <div className={s.sep} />
 
-            {/* User chip */}
-            <button className={s.user}>
-              <span className={s.avatar}>foto</span>
+            {/* User chip con Dropdown*/}
+            <div className={s.userWrapper}>
+            <button className={s.user} onClick={() => setUserDropdownOpen(!userDropdownOpen)}>
+              {/* <span className={s.avatar}>foto</span> */} {/*para ver la foto en miniatura*/}
               <span className={s.userInfo}>
                 <span className={s.userName}>{personal?.nombre}</span>
                 <span className={s.userRole}>{personal?.cargo?.nombre}</span>
               </span>
-              <svg className={s.chevron} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <svg className={`${s.chevron} ${userDropdownOpen ? s.chevronRotate : ''}`} 
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <path d="M6 9l6 6 6-6" />
               </svg>
             </button>
 
+            {/* LISTA DESPLEGABLE */}
+              {userDropdownOpen && (
+                <div className={s.userDropdown}>
+                  <div className={s.dropdownHeader}>Mi Perfil</div>
+                  <NavLink 
+                    to="/registro-sociocultural" 
+                    className={s.dropdownItem}
+                    onClick={closeDropdowns}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                    </svg>
+                    Ficha Sociocultural
+                  </NavLink>
+                  <div className={s.dropdownDivider} />
+                  <button className={`${s.dropdownItem} ${s.logoutBtn}`}>
+                    Cerrar Sesión
+                  </button>
+                </div>
+              )}
+            </div>
             {/* Hamburger */}
             <button
               className={s.hamburger}
@@ -82,23 +112,6 @@ export default function NavBar() {
           </div>
         </div>
       </nav>
-
-      {/* Mobile drawer */}
-      {/* {menuOpen && (
-        <div className={s.drawer}>
-          {NAV_LINKS.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className={({ isActive }) => `${s.link}${isActive ? ` ${s.active}` : ''}`}
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.icon}
-              {link.label}
-            </NavLink>
-          ))}
-        </div>
-      )} */}
     </>
   )
 }
