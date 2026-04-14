@@ -3,7 +3,7 @@ import type { Personal } from '../types/personal'
 export const personalMock: Personal = {
   PE: 1,
   nombre: 'Juan Camilo Restrepo',
-  cargo: { id: 3, nombre: 'Operario de Campo' },
+  cargo: { _id: '3', nombre: 'Operario de Campo', areasAcceso: [], color: '#7EBA27' },
   identificacion: '1234567890',
   tipoDocumento: 'CC',
   foto: undefined,

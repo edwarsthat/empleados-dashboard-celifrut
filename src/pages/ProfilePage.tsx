@@ -4,10 +4,10 @@ import useDataStore from '../store/useDataStore'
 import AreasAccesoCard from '../components/AreasAccesoCard'
 
 const ProfilePage = () => {
-    const { fetchAreas } = useDataStore()
+    const { fetchAreasAcceso } = useDataStore()
     useEffect(() => { 
-        fetchAreas()
-    },[fetchAreas])
+        fetchAreasAcceso()
+    },[fetchAreasAcceso])
     return (
         <>
             <UserCard />
