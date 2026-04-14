@@ -1,0 +1,73 @@
+.wrapper {
+    padding: 40px;
+    border-radius: 16px;
+    max-width: 1000px;
+    margin: 20px auto;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: linear-gradient(to right, #a0b5eb 0%, #c9f0e4 100%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Título de sección ──────────────────────────────── */
+.sectionTitle {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 35px 0 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sectionTitle::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background: #75ac23;
+    margin-right: 12px;
+    border-radius: 2px;
+}
+
+/* ── Grid de campos ─────────────────────────────────── */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+
+/* ── Campo individual ───────────────────────────────── */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+
+.label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.value {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #2d3748;
+    word-break: break-word;
+}
+
+.empty {
+    color: #a0aec0;
+    font-style: italic;
+    font-weight: 400;
+}

@@ -3,21 +3,21 @@ import type { areasType } from '../types/areas'
 import { config } from '../config'
 
 type UseDataStoreType = {
-    areas: areasType[]
-    setAreas: (value: areasType[]) => void
-    fetchAreas: () => Promise<void>
+    areasAcceso: areasType[]
+    setAreasAcceso: (value: areasType[]) => void
+    fetchAreasAcceso: () => Promise<void>
 }
 
 const useDataStore = create<UseDataStoreType>((set) => ({
-    areas: [],
-    setAreas: (value) => set({ areas: value }),
-    fetchAreas: async () => {
+    areasAcceso: [],
+    setAreasAcceso: (value) => set({ areasAcceso: value }),
+    fetchAreasAcceso: async () => {
         const response = await fetch(`${config.apiUrl}/talento_humano/areas_acceso`, {
             credentials: 'include',
         })
         if (!response.ok) return
         const data = await response.json()
-        set({ areas: data })
+        set({ areasAcceso: data })
     },
 }))
 

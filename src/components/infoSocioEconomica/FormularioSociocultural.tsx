@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import styles from '../styles/Formulario.module.css'; 
+import styles from '../styles/Formulario.module.css';
 
-export default function FormularioSociocultural() {
-    const [formData, setFormData] = useState({});
+interface Props {
+    initialData?: Record<string, string>;
+}
+
+export default function FormularioSociocultural({ initialData = {} }: Props) {
+    const [formData, setFormData] = useState<Record<string, string>>(initialData);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });

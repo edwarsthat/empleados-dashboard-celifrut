@@ -26,7 +26,7 @@ export default function NavBar() {
         <div className={s.inner}>
 
           {/* Brand */}
-          <NavLink to="/dashboard" className={s.brand}>
+          <NavLink to="/" className={s.brand}>
             <img src="/1.webp" alt="Logo" className={s.brandLogo} />
             <span>
               <div className={s.brandName}>Empleados</div>
