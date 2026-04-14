@@ -13,11 +13,11 @@ function QRFlow() {
 }
 
 function AuthFlow() {
-  // const { isLoading } = useAuth()
-  // const isLogin = useAuthStore((s) => s.isLogin)
+  const { isLoading } = useAuth()
+  const isLogin = useAuthStore((s) => s.isLogin)
 
-  // if (isLoading) return <p>Verificando sesión...</p>
-  // if (!isLogin) return <Navigate to="/login" replace />
+  if (isLoading) return <p>Verificando sesión...</p>
+  if (!isLogin) return <Navigate to="/login" replace />
   return <ProfilePage />
 }
 
