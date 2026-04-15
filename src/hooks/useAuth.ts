@@ -29,7 +29,7 @@ export function useAuth(): { isLoading: boolean } {
         loginRequest()
 
         return () => { cancelled = true }
-    }, [setIsLogin, setPersonal])
+}, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return { isLoading }
 }

@@ -1,7 +1,7 @@
 const isProd = import.meta.env.PROD
 
 export const config = {
-    apiUrl: import.meta.env.VITE_API_URL as string,
+    apiUrl: import.meta.env.DEV ? '/api' : 'https://credenciales.celifrut.com/api',
     isDev: !isProd,
     isProd,
 } as const
