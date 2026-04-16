@@ -33,11 +33,11 @@ export default function UserCard() {
 
       {/* Info principal */}
       <div className={s.info}>
-        <h2 className={s.nombre}>{personal.nombre}</h2>
+        <h2 className={s.nombre}>{personal.nombre  + " " + personal.apellido}</h2>
 
         {personal.cargo && (
           <span className={s.cargoBadge} style={{ background: personal.cargo.color + '22', color: personal.cargo.color, borderColor: personal.cargo.color + '55' }}>
-            {personal.cargo.nombre}
+            {personal.cargo.nombre} 
           </span>
         )}
 

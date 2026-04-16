@@ -3,6 +3,7 @@ import type { Cargo } from "./cargos"
 export interface Personal {
   PE: number
   nombre: string
+  apellido: string
   cargo: Cargo | null
   identificacion: string
   tipoDocumento: string
@@ -39,5 +40,5 @@ export interface Personal {
   contactoEmergenciaParentesco?: string
   tieneVehiculo?: boolean
   estadoCivil?: string
-  fechaFormularioSociodemografico?: string
+  fecha_formulario_sociodemografico?: string
 }

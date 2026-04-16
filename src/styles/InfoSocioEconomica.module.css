@@ -71,3 +71,29 @@
     font-style: italic;
     font-weight: 400;
 }
+
+/* ── Botón de editar ────────────────────────────────── */
+.headerActions {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+}
+
+.editBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #75ac23;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.editBtn:hover {
+    background: #5f8f1a;
+}

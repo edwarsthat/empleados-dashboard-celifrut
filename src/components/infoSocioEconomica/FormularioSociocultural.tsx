@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from '../../styles/Formulario.module.css';
 import { config } from '../../config';
 
@@ -7,10 +8,13 @@ interface Props {
 }
 
 export default function FormularioSociocultural({ initialData = {} }: Props) {
-    const [formData, setFormData] = useState<Record<string, string>>(initialData);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const stateData = (location.state as { initialData?: Record<string, string> } | null)?.initialData ?? {};
+    const [formData, setFormData] = useState<Record<string, string>>({ ...stateData, ...initialData });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitResult, setSubmitResult] = useState<'success' | 'error' | null>(null);
-    const [formKey, setFormKey] = useState(0);
+    const [formKey] = useState(0);
 
     
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -75,9 +79,8 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 body: JSON.stringify(buildPayload()),
             });
             if (!response.ok) throw new Error(`Error ${response.status}`);
-            setFormData({});
-            setFormKey(k => k + 1);
             setSubmitResult('success');
+            setTimeout(() => navigate('/'), 1500);
         } catch {
             setSubmitResult('error');
         } finally {
@@ -107,15 +110,15 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 <div className={styles.grid}>
                 <div className={styles.field}>
                     <label>Nombre <span className={styles.required}>*</span></label>
-                    <input type="text" name="nombre" className={styles.input} onChange={handleChange} required />
+                    <input type="text" name="nombre" className={styles.input} value={formData.nombre ?? ''} onChange={handleChange} required />
                 </div>
                 <div className={styles.field}>
                     <label>Apellido <span className={styles.required}>*</span></label>
-                    <input type="text" name="apellido" className={styles.input} onChange={handleChange} required />
+                    <input type="text" name="apellido" className={styles.input} value={formData.apellido ?? ''} onChange={handleChange} required />
                 </div>
                 <div className={styles.field}>
                     <label>Tipo de Documento <span className={styles.required}>*</span></label>
-                    <select name="tipoDocumento" className={styles.select} onChange={handleChange} required>
+                    <select name="tipoDocumento" className={styles.select} value={formData.tipoDocumento ?? ''} onChange={handleChange} required>
                     <option value="">Seleccione...</option>
                     <option value="TI">TI (Tarjeta de identidad)</option>
                     <option value="CC">CC (Cedula de Ciudadania)</option>
@@ -125,11 +128,11 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 </div>
                 <div className={styles.field}>
                     <label>Nro. de Documento <span className={styles.required}>*</span></label>
-                    <input type="text" name="nroDocumento" className={styles.input} placeholder="Sin puntos ni comas" onChange={handleChange} required />
+                    <input type="text" name="nroDocumento" className={styles.input} value={formData.nroDocumento ?? ''} placeholder="Sin puntos ni comas" onChange={handleChange} required />
                 </div>
                 <div className={styles.field}>
                     <label>Género</label>
-                    <select name="genero" className={styles.select} onChange={handleChange}>
+                    <select name="genero" className={styles.select} value={formData.genero ?? ''} onChange={handleChange}>
                     <option value="">Seleccione...</option>
                     <option value="Masculino">Masculino</option>
                     <option value="Femenino">Femenino</option>
@@ -138,7 +141,7 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 </div>
                 <div className={styles.field}>
                     <label>Nacionalidad</label>
-                    <select name="nacionalidad" className={styles.select} onChange={handleChange}>
+                    <select name="nacionalidad" className={styles.select} value={formData.nacionalidad ?? ''} onChange={handleChange}>
                     <option value="">Seleccione...</option>
                     <option value="Colombiano">Colombiano (a)</option>
                     <option value="Venezolano">Venezolano (a)</option>
@@ -146,19 +149,15 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 </div>
                 <div className={styles.field}>
                     <label>Fecha de Nacimiento</label>
-                    <input type="date" name="fechaNacimiento" className={styles.input} onChange={handleChange} />
+                    <input type="date" name="fechaNacimiento" className={styles.input} value={formData.fechaNacimiento ?? ''} onChange={handleChange} />
                 </div>
-                <div className={styles.field}>
-                    <label>Edad</label>
-                    <input type="number" name="edad" className={styles.input} onChange={handleChange} />
-                </div>
-                <div className={styles.field}>
+<div className={styles.field}>
                     <label>Tipo de Sangre / RH</label>
-                    <input type="text" name="rh" className={styles.input} placeholder="Ej: O+" onChange={handleChange} />
+                    <input type="text" name="rh" className={styles.input} value={formData.rh ?? ''} placeholder="Ej: O+" onChange={handleChange} />
                 </div>
                 <div className={styles.field}>
                     <label>Raza</label>
-                    <select name="raza" className={styles.select} onChange={handleChange}>
+                    <select name="raza" className={styles.select} value={formData.raza ?? ''} onChange={handleChange}>
                     <option value="">Seleccione...</option>
                     <option value="Mestizo">Mestizo</option>
                     <option value="Afrodescendiente">Afrodescendiente</option>
@@ -173,23 +172,23 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 <div className={styles.grid}>
                 <div className={styles.field}>
                     <label>EPS</label>
-                    <input type="text" name="eps" className={styles.input} onChange={handleChange} />
+                    <input type="text" name="eps" className={styles.input} value={formData.eps ?? ''} onChange={handleChange} />
                 </div>
                 <div className={styles.field}>
                     <label>Fondo de Pensiones</label>
-                    <input type="text" name="pensiones" className={styles.input} onChange={handleChange} />
+                    <input type="text" name="pensiones" className={styles.input} value={formData.pensiones ?? ''} onChange={handleChange} />
                 </div>
                 <div className={styles.field}>
                     <label>Fondo de Cesantías</label>
-                    <input type="text" name="cesantias" className={styles.input} onChange={handleChange} />
+                    <input type="text" name="cesantias" className={styles.input} value={formData.cesantias ?? ''} onChange={handleChange} />
                 </div>
                 <div className={styles.field}>
                     <label>Celular</label>
-                    <input type="tel" name="celular" className={styles.input} onChange={handleChange} />
+                    <input type="tel" name="celular" className={styles.input} value={formData.celular ?? ''} onChange={handleChange} />
                 </div>
                 <div className={styles.field}>
                     <label>Correo Electrónico</label>
-                    <input type="email" name="correo" className={styles.input} onChange={handleChange} />
+                    <input type="email" name="correo" className={styles.input} value={formData.correo ?? ''} onChange={handleChange} />
                 </div>
                 </div>
 
@@ -198,7 +197,7 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 <div className={styles.grid}>
                 <div className={styles.field}>
                     <label>Grado de escolaridad</label>
-                    <select name="escolaridad" className={styles.select} onChange={handleChange}>
+                    <select name="escolaridad" className={styles.select} value={formData.escolaridad ?? ''} onChange={handleChange}>
                     <option value="">Seleccione...</option>
                     <option value="Preescolar">Preescolar</option>
                     <option value="Basica">Basica (1-5)</option>
@@ -211,7 +210,7 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 </div>
                 <div className={styles.field}>
                     <label>Título Obtenido</label>
-                    <input type="text" name="titulo" className={styles.input} onChange={handleChange} />
+                    <input type="text" name="titulo" className={styles.input} value={formData.titulo ?? ''} onChange={handleChange} />
                 </div>
                 </div>
 
@@ -220,15 +219,15 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 <div className={styles.grid}>
                 <div className={styles.field}>
                     <label>Departamento</label>
-                    <input type="text" name="departamento" className={styles.input} onChange={handleChange} />
+                    <input type="text" name="departamento" className={styles.input} value={formData.departamento ?? ''} onChange={handleChange} />
                 </div>
                 <div className={styles.field}>
                     <label>Ciudad</label>
-                    <input type="text" name="ciudad" className={styles.input} onChange={handleChange} />
+                    <input type="text" name="ciudad" className={styles.input} value={formData.ciudad ?? ''} onChange={handleChange} />
                 </div>
                 <div className={styles.field}>
                     <label>Tipo de Vivienda</label>
-                    <select name="tipoVivienda" className={styles.select} onChange={handleChange}>
+                    <select name="tipoVivienda" className={styles.select} value={formData.tipoVivienda ?? ''} onChange={handleChange}>
                     <option value="">Seleccione...</option>
                     <option value="Propia">Propia</option>
                     <option value="Arrendada">Arrendada</option>
@@ -237,18 +236,18 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 </div>
                 <div className={styles.field}>
                     <label>Barrio y Dirección</label>
-                    <input type="text" name="direccion" className={styles.input} onChange={handleChange} />
+                    <input type="text" name="direccion" className={styles.input} value={formData.direccion ?? ''} onChange={handleChange} />
                 </div>
                 <div className={styles.field}>
                     <label>Sector</label>
-                    <select name="sector" className={styles.select} onChange={handleChange}>
+                    <select name="sector" className={styles.select} value={formData.sector ?? 'Urbano'} onChange={handleChange}>
                     <option value="Urbano">Urbano</option>
                     <option value="Rural">Rural</option>
                     </select>
                 </div>
                 <div className={styles.field}>
                     <label>Estrato</label>
-                    <select name="estrato" className={styles.select} onChange={handleChange}>
+                    <select name="estrato" className={styles.select} value={formData.estrato ?? '1'} onChange={handleChange}>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -262,7 +261,7 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 <div className={styles.grid}>
                 <div className={styles.field}>
                     <label>Personas a Cargo</label>
-                    <select name="personasCargo" className={styles.select} onChange={handleChange}>
+                    <select name="personasCargo" className={styles.select} value={formData.personasCargo ?? 'Ninguna'} onChange={handleChange}>
                     <option value="Ninguna">Ninguna</option>
                     <option value="1-2">1 a 2</option>
                     <option value="3-4">3 a 4</option>
@@ -271,7 +270,7 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 </div>
                 <div className={styles.field}>
                     <label>Vulnerabilidad</label>
-                    <select name="vulnerabilidad" className={styles.select} onChange={handleChange}>
+                    <select name="vulnerabilidad" className={styles.select} value={formData.vulnerabilidad ?? 'Ninguno'} onChange={handleChange}>
                     <option value="Ninguno">Ninguno</option>
                     <option value="Desplazado">Desplazado</option>
                     <option value="Victima">Victima del Conflicto</option>
@@ -281,7 +280,7 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 </div>
                 <div className={styles.field}>
                     <label>Orientación Sexual</label>
-                    <select name="orientacion" className={styles.select} onChange={handleChange}>
+                    <select name="orientacion" className={styles.select} value={formData.orientacion ?? 'Heterosexual'} onChange={handleChange}>
                     <option value="Heterosexual">Heterosexual</option>
                     <option value="Homosexual">Homosexual</option>
                     <option value="Bisexual">Bisexual</option>
@@ -289,7 +288,7 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 </div>
                 <div className={styles.field}>
                     <label>Pertenencia Étnica</label>
-                    <select name="etnia" className={styles.select} onChange={handleChange}>
+                    <select name="etnia" className={styles.select} value={formData.etnia ?? 'Ninguno'} onChange={handleChange}>
                     <option value="Ninguno">Ninguno</option>
                     <option value="Afrocolombiano">Afrocolombiano</option>
                     <option value="Indigena">Indigena</option>
@@ -298,7 +297,7 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 </div>
                 <div className={styles.field}>
                     <label>Estado Civil</label>
-                    <select name="estadoCivil" className={styles.select} onChange={handleChange}>
+                    <select name="estadoCivil" className={styles.select} value={formData.estadoCivil ?? 'Soltero'} onChange={handleChange}>
                     <option value="Soltero">Soltero (a) sin hijos</option>
                     <option value="Soltero con hijos">Soltero (a) con hijos</option>
                     <option value="Casado">Casado (a)</option>
@@ -307,7 +306,7 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 </div>
                 <div className={styles.field}>
                     <label>¿Tiene Vehículo?</label>
-                    <select name="vehiculo" className={styles.select} onChange={handleChange}>
+                    <select name="vehiculo" className={styles.select} value={formData.vehiculo ?? 'No'} onChange={handleChange}>
                     <option value="No">No</option>
                     <option value="Bicicleta">Si: Bicicleta</option>
                     <option value="Motocicleta">Si: Motocicleta</option>
@@ -321,15 +320,15 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 <div className={styles.grid}>
                 <div className={styles.field}>
                     <label>Nombre de Contacto</label>
-                    <input type="text" name="emergenciaNombre" className={styles.input} onChange={handleChange} />
+                    <input type="text" name="emergenciaNombre" className={styles.input} value={formData.emergenciaNombre ?? ''} onChange={handleChange} />
                 </div>
                 <div className={styles.field}>
                     <label>Parentesco</label>
-                    <input type="text" name="emergenciaParentesco" className={styles.input} onChange={handleChange} />
+                    <input type="text" name="emergenciaParentesco" className={styles.input} value={formData.emergenciaParentesco ?? ''} onChange={handleChange} />
                 </div>
                 <div className={styles.field}>
                     <label>Teléfono de Contacto</label>
-                    <input type="tel" name="emergenciaTelefono" className={styles.input} onChange={handleChange} />
+                    <input type="tel" name="emergenciaTelefono" className={styles.input} value={formData.emergenciaTelefono ?? ''} onChange={handleChange} />
                 </div>
                 </div>
 
