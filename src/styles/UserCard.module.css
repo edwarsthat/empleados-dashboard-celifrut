@@ -1,14 +1,15 @@
 .card {
   display: flex;
-  gap: 32px;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  text-align: center;
   background: var(--color-card-bg);
   border: 1px solid var(--border-Color);
   border-radius: 20px;
-  padding: 40px;
+  padding: 32px 28px;
   box-shadow: 0 4px 20px var(--color-card-shadow);
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  max-width: 620px;
 }
 
 /* ── Avatar ──────────────────────────────────────────── */
@@ -18,34 +19,36 @@
 }
 
 .avatarImg {
-  width: 110px;
-  height: 110px;
-  border-radius: 16px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
   object-fit: cover;
   display: block;
+  border: 3px solid var(--color-Celifrut);
 }
 
 .avatarFallback {
-  width: 110px;
-  height: 110px;
-  border-radius: 16px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 700;
   color: #fff;
   letter-spacing: 1px;
+  border: 3px solid var(--color-Celifrut);
 }
 
 .estadoBadge {
   position: absolute;
-  bottom: 4px;
-  right: 4px;
-  width: 12px;
-  height: 12px;
+  bottom: 6px;
+  right: 6px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  border: 2px solid var(--color-card-bg);
+  border: 3px solid var(--color-card-bg);
 }
 
 .activo  { background: #22c55e; }
@@ -55,21 +58,20 @@
 .info {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 10px;
-  flex: 1;
-  min-width: 0;
+  width: 100%;
 }
 
 .nombre {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--color-title);
   margin: 0;
   line-height: 1.2;
   letter-spacing: -0.2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-align: center;
+  word-break: break-word;
 }
 
 .cargoBadge {
@@ -84,30 +86,37 @@
 
 /* ── Detalles ────────────────────────────────────────── */
 .detalles {
-  margin: 0;
+  margin: 8px 0 0;
+  padding: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0;
+  border-top: 1px solid var(--border-Color);
 }
 
 .detalle {
   display: flex;
-  gap: 8px;
-  font-size: 14px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
   line-height: 1.4;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--border-Color);
 }
 
 .detalle dt {
   color: var(--color-text);
   font-weight: 500;
   flex-shrink: 0;
-  min-width: 100px;
 }
 
 .detalle dd {
   margin: 0;
   color: var(--color-subtitle);
-  font-weight: 400;
+  font-weight: 600;
+  text-align: right;
 }
 
 .textoActivo  { color: #22c55e; font-weight: 600; }
