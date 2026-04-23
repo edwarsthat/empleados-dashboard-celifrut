@@ -4,5 +4,6 @@ export interface Cargo {
   _id: string
   nombre: string
   areasAcceso: string[]
+  areasAccesoParcial: string[]
   color: CargoColor
 }

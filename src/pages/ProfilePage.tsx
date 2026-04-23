@@ -11,8 +11,11 @@ const ProfilePage = () => {
     },[fetchAreasAcceso])
     return (
         <div className={s.page}>
-            <UserCard />
-            <AreasAccesoCard />
+            <div className={s.left}>
+                <UserCard />
+                <AreasAccesoCard tipo="areasAccesoParcial" />
+            </div>
+            <AreasAccesoCard tipo='areasAcceso' />
         </div>
     )
 }

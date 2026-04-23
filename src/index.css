@@ -90,6 +90,9 @@
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 /* ── ScanQr ──────────────────────────────────────────── */
