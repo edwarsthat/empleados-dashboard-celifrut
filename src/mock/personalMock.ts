@@ -2,8 +2,11 @@ import type { Personal } from '../types/personal'
 
 export const personalMock: Personal = {
   PE: 1,
-  nombre: 'Juan Camilo Restrepo',
-  cargo: { _id: '3', nombre: 'Operario de Campo', areasAcceso: [], color: '#7EBA27' },
+  nombre: 'Juan Camilo',
+  apellido: 'Restrepo',
+  cargo: {
+     _id: '3', nombre: 'Operario de Campo', areasAcceso: [], color: '#7EBA27', areasAccesoParcial:[]
+     },
   identificacion: '1234567890',
   tipoDocumento: 'CC',
   foto: undefined,
@@ -39,5 +42,5 @@ export const personalMock: Personal = {
   contactoEmergenciaParentesco: 'Madre',
   tieneVehiculo: false,
   estadoCivil: 'Soltero con hijos',
-  fechaFormularioSociodemografico: '2026-01-10T08:30:00Z',
+  fecha_formulario_sociodemografico: '2026-01-10T08:30:00Z',
 }
