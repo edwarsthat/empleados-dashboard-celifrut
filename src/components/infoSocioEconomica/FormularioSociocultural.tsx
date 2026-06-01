@@ -51,19 +51,18 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
         if (d.ciudad)               payload.municipio                   = d.ciudad;
         if (d.tipoVivienda)         payload.tipo_vivienda               = d.tipoVivienda;
         if (d.direccion)            payload.direccion                   = d.direccion;
-        if (d.estrato)              payload.strato                      = d.estrato;
-        if (d.personasCargo) {
-            const val = mapPersonasCargo(d.personasCargo);
-            if (val !== undefined)  payload.personas_a_cargo            = val;
-        }
-        if (d.vulnerabilidad)       payload.vulnerabilidad              = d.vulnerabilidad;
-        if (d.orientacion)          payload.orientacion_sexual          = d.orientacion;
-        if (d.etnia)                payload.pertenencia_etnica          = d.etnia;
+        payload.estrato = d.estrato || '1';
+        const personasCargo = d.personasCargo || 'Ninguna';
+        const val = mapPersonasCargo(personasCargo);
+        if (val !== undefined)      payload.personas_a_cargo            = val;
+        payload.vulnerabilidad      = d.vulnerabilidad || 'Ninguno';
+        payload.orientacion_sexual  = d.orientacion || 'Heterosexual';
+        payload.pertenencia_etnica  = d.etnia || 'Ninguno';
         if (d.emergenciaNombre)     payload.contacto_emergencia_nombre  = d.emergenciaNombre;
         if (d.emergenciaTelefono)   payload.contacto_emergencia_telefono= d.emergenciaTelefono;
         if (d.emergenciaParentesco) payload.contacto_emergencia_parentesco = d.emergenciaParentesco;
-        if (d.vehiculo)             payload.tiene_vehiculo              = d.vehiculo !== 'No';
-        if (d.estadoCivil)          payload.estado_civil                = d.estadoCivil;
+        payload.tiene_vehiculo      = (d.vehiculo || 'No') !== 'No';
+        payload.estado_civil        = d.estadoCivil || 'Soltero';
         return payload;
     };
 
@@ -80,7 +79,7 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
             });
             if (!response.ok) throw new Error(`Error ${response.status}`);
             setSubmitResult('success');
-            setTimeout(() => navigate('/'), 1500);
+            // setTimeout(() => navigate('/'), 1500);
         } catch {
             setSubmitResult('error');
         } finally {
@@ -120,10 +119,10 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                     <label>Tipo de Documento <span className={styles.required}>*</span></label>
                     <select name="tipoDocumento" className={styles.select} value={formData.tipoDocumento ?? ''} onChange={handleChange} required>
                     <option value="">Seleccione...</option>
-                    <option value="TI">TI (Tarjeta de identidad)</option>
-                    <option value="CC">CC (Cedula de Ciudadania)</option>
-                    <option value="CE">CE (Cedula de Extranjeria)</option>
-                    <option value="PPT">PPT (Permiso por Proteccion Temporal)</option>
+                    <option value="tarjeta_identidad">TI (Tarjeta de identidad)</option>
+                    <option value="cedula">CC (Cedula de Ciudadania)</option>
+                    <option value="cedula_extranjera">CE (Cedula de Extranjeria)</option>
+                    <option value="permiso_proteccion_temporal">PPT (Permiso por Proteccion Temporal)</option>
                     </select>
                 </div>
                 <div className={styles.field}>
