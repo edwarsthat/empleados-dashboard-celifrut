@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import styles from '../../styles/Formulario.module.css';
 import { config } from '../../config';
 
@@ -9,7 +9,6 @@ interface Props {
 
 export default function FormularioSociocultural({ initialData = {} }: Props) {
     const location = useLocation();
-    const navigate = useNavigate();
     const stateData = (location.state as { initialData?: Record<string, string> } | null)?.initialData ?? {};
     const [formData, setFormData] = useState<Record<string, string>>({ ...stateData, ...initialData });
     const [isSubmitting, setIsSubmitting] = useState(false);
