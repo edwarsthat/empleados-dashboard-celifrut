@@ -4,8 +4,7 @@
 
 name: Frontend CI/CD
 
-# ── Permisos mínimos por defecto para todo el workflow ──────────────────────
-# Cualquier job que necesite más permisos los declara explícitamente.
+# Permisos mínimos por defecto — cada job eleva solo lo que necesita.
 permissions: read-all
 
 on:
@@ -13,33 +12,24 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  # ADVERTENCIA: pull_request_target tiene acceso a secretos incluso desde
-  # forks — NO se usa aquí porque no es necesario y representa un riesgo alto.
 
 jobs:
   # ── Job 1: CI — build y verificación ──────────────────────────────────────
-  # Corre en push Y en pull_request. Sin acceso a secretos.
-  # Es seguro que lo dispare cualquier fork externo.
+  # Corre en push Y en pull_request. Sin secretos. Seguro para forks externos.
   build:
-    runs-on: ubuntu-22.04  # versión fija, no ubuntu-latest (evita sorpresas)
-    # Sin elevación de permisos — hereda read-all del workflow
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout code
-        # SHA fijado al commit exacto de actions/checkout v4.2.2
-        # Razón: un tag @v4 puede ser movido por el autor de la action;
-        # un SHA es inmutable y no puede ser comprometido silenciosamente.
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        uses: actions/checkout@v4
 
       - name: Instalar pnpm
-        # pnpm/action-setup v3.0.0
-        uses: pnpm/action-setup@a3252b01235470b1bc1e82a41ad12b56d0e0609b
+        uses: pnpm/action-setup@v4
         with:
           version: 11.2.2
 
       - name: Configurar Node.js
-        # actions/setup-node v4.1.0
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
@@ -50,42 +40,37 @@ jobs:
       - name: Build
         run: pnpm build
 
-      # Subir dist/ como artefacto para que el job deploy lo descargue.
-      # Esto evita hacer checkout + build dos veces y garantiza que
-      # el deploy usa exactamente el mismo binario que pasó el CI.
+      # Sube dist/ como artefacto — el job deploy lo descarga.
+      # Garantiza que el servidor recibe exactamente el mismo build que pasó CI.
       - name: Subir artefacto dist
-        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/
-          retention-days: 1  # no necesitamos guardarlo más tiempo
+          retention-days: 1
 
   # ── Job 2: CD — deploy al VPS ─────────────────────────────────────────────
   # SOLO corre en push a main (PR mergeado). NUNCA en pull_request.
-  # La condición `github.event_name == 'push'` es la barrera de seguridad:
-  # un PR desde un fork externo dispara pull_request, no push → nunca llega aquí.
+  # Un PR de fork dispara pull_request, no push → nunca llega a este job.
   deploy:
     runs-on: ubuntu-22.04
     needs: build
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
-    # Eleva permisos mínimos necesarios para este job.
-    # No necesita escribir código, paquetes, ni nada en GitHub.
     permissions:
-      contents: read  # para descargar el artefacto del workflow
+      contents: read
 
-    environment: production  # opcional pero recomendado: agrega aprobación manual en GitHub
+    environment: production
 
     steps:
       - name: Descargar artefacto dist
-        uses: actions/download-artifact@fa0a91b85d4f404e444306234d4c2d4a7b46aedf
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist/
 
       - name: Configurar SSH
-        # webfactory/ssh-agent v0.9.0
-        uses: webfactory/ssh-agent@dc588b651fe13d2ee95826b660fd68f3cfdaadff
+        uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
