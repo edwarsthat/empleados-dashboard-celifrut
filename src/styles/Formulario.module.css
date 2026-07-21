@@ -88,6 +88,9 @@
 
 /* Estilo de Inputs y Selects */
 .input, .select {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     padding: 10px 14px;
     border: 1px solid #cbd5e0;
     border-radius: 8px;
@@ -95,6 +98,12 @@
     color: #2d3748;
     background-color: #f7fafc;
     transition: all 0.2s ease-in-out;
+}
+
+.select {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .input:hover, .select:hover {
@@ -156,4 +165,44 @@
     border: 1px solid #fc8181;
     color: #9b2c2c;
     font-size: 0.9rem;
+}
+
+.thankYouContainer {
+    padding: 60px 40px;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    background: linear-gradient(to right, #a0b5eb 0%, #c9f0e4 100%);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.thankYouIcon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #75ac23;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.thankYouTitle {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0;
+}
+
+.thankYouText {
+    font-size: 1rem;
+    color: #2d3748;
+    max-width: 600px;
+    line-height: 1.6;
+    margin: 0;
 }

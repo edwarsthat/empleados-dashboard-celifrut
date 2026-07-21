@@ -54,14 +54,35 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
         const personasCargo = d.personasCargo || 'Ninguna';
         const val = mapPersonasCargo(personasCargo);
         if (val !== undefined)      payload.personas_a_cargo            = val;
-        payload.vulnerabilidad      = d.vulnerabilidad || 'Ninguno';
+        payload.vulnerabilidad      = d.vulnerabilidad || 'No aplica';
         payload.orientacion_sexual  = d.orientacion || 'Heterosexual';
-        payload.pertenencia_etnica  = d.etnia || 'Ninguno';
+        payload.pertenencia_etnica  = d.etnia || 'No se auto reconoce en ninguno de los anteriores';
         if (d.emergenciaNombre)     payload.contacto_emergencia_nombre  = d.emergenciaNombre;
         if (d.emergenciaTelefono)   payload.contacto_emergencia_telefono= d.emergenciaTelefono;
         if (d.emergenciaParentesco) payload.contacto_emergencia_parentesco = d.emergenciaParentesco;
         payload.tiene_vehiculo      = (d.vehiculo || 'No') !== 'No';
         payload.estado_civil        = d.estadoCivil || 'Soltero';
+
+        if (d.nombreConyugue)       payload.nombre_conyugue             = d.nombreConyugue;
+        if (d.apellidoConyugue)     payload.apellido_conyugue           = d.apellidoConyugue;
+        if (d.telefonoConyugue)     payload.telefono_conyugue           = d.telefonoConyugue;
+        if (d.tiempoConviviendo)    payload.tiempo_conviviendo          = Number(d.tiempoConviviendo);
+        const tieneHijos = (d.tieneHijos || 'No') === 'Si';
+        payload.tiene_hijos = tieneHijos;
+        if (tieneHijos) {
+            if (d.cuantosHijos)     payload.cuantos_hijos               = Number(d.cuantosHijos);
+            if (d.edadHijos) {
+                payload.edad_hijos = d.edadHijos
+                    .split(',')
+                    .map((edad) => Number(edad.trim()))
+                    .filter((edad) => !Number.isNaN(edad));
+            }
+        }
+
+        if (d.camisa)               payload.camisa                     = d.camisa;
+        if (d.pantalon)              payload.pantalon                    = d.pantalon;
+        if (d.calzado)               payload.calzado                     = d.calzado;
+
         return payload;
     };
 
@@ -86,6 +107,25 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
         }
     };
 
+    if (submitResult === 'success') {
+        return (
+            <div className={styles.formWrapper}>
+                <div className={styles.infoBanner}>
+                    <img src="/1.webp" alt="Celifrut SAS" className={styles.logo} />
+                    <h2 className={styles.sectionTitle}>Registro de Información Sociocultural</h2>
+                </div>
+                <div className={styles.thankYouContainer}>
+                    <div className={styles.thankYouIcon}>✓</div>
+                    <h3 className={styles.thankYouTitle}>¡Gracias por completar el formulario!</h3>
+                    <p className={styles.thankYouText}>
+                        Hemos recibido correctamente su información. El equipo de Talento Humano de Celifrut SAS la
+                        revisará y, si necesita algo adicional, se pondrá en contacto con usted. Ya puede cerrar esta ventana.
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className={styles.formWrapper}>
             <div className={styles.infoBanner}>
@@ -107,11 +147,11 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 <h2 className={styles.sectionTitle}>1. Identificación y Datos Básicos</h2>
                 <div className={styles.grid}>
                 <div className={styles.field}>
-                    <label>Nombre <span className={styles.required}>*</span></label>
+                    <label>Nombres <span className={styles.required}>*</span></label>
                     <input type="text" name="nombre" className={styles.input} value={formData.nombre ?? ''} onChange={handleChange} required />
                 </div>
                 <div className={styles.field}>
-                    <label>Apellido <span className={styles.required}>*</span></label>
+                    <label>Apellidos <span className={styles.required}>*</span></label>
                     <input type="text" name="apellido" className={styles.input} value={formData.apellido ?? ''} onChange={handleChange} required />
                 </div>
                 <div className={styles.field}>
@@ -135,6 +175,8 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                     <option value="Masculino">Masculino</option>
                     <option value="Femenino">Femenino</option>
                     <option value="Indefinido">Indefinido</option>
+                    <option value="LGBTIQ">LGBTIQ+</option>
+                    <option value="no_response">Prefiro no responder</option>
                     </select>
                 </div>
                 <div className={styles.field}>
@@ -268,12 +310,19 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 </div>
                 <div className={styles.field}>
                     <label>Vulnerabilidad</label>
-                    <select name="vulnerabilidad" className={styles.select} value={formData.vulnerabilidad ?? 'Ninguno'} onChange={handleChange}>
-                    <option value="Ninguno">Ninguno</option>
+                    <select name="vulnerabilidad" className={styles.select} value={formData.vulnerabilidad ?? 'No aplica'} onChange={handleChange}>
                     <option value="Desplazado">Desplazado</option>
-                    <option value="Victima">Victima del Conflicto</option>
-                    <option value="Migrante">Poblacion migrante</option>
+                    <option value="Victima del conflicto armado (No desplazado)">Víctima del conflicto armado (No desplazado)</option>
+                    <option value="Desmovilizado o reinsertado">Desmovilizado o reinsertado</option>
+                    <option value="Hijo (as) de desmovilizados o reinsertados">Hijo (as) de desmovilizados o reinsertados</option>
+                    <option value="Damnificado desastre natural">Damnificado desastre natural</option>
                     <option value="Cabeza de familia">Cabeza de familia</option>
+                    <option value="Hijo (as) de madres cabeza de familia">Hijo (as) de madres cabeza de familia</option>
+                    <option value="En condicion de discapacidad">En condición de discapacidad</option>
+                    <option value="Poblacion migrante">Población migrante</option>
+                    <option value="Poblacion zonas frontera (Nacionales)">Población zonas frontera (Nacionales)</option>
+                    <option value="Ejercicio del trabajo sexual">Ejercicio del trabajo sexual</option>
+                    <option value="No aplica">No aplica</option>
                     </select>
                 </div>
                 <div className={styles.field}>
@@ -286,11 +335,14 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 </div>
                 <div className={styles.field}>
                     <label>Pertenencia Étnica</label>
-                    <select name="etnia" className={styles.select} value={formData.etnia ?? 'Ninguno'} onChange={handleChange}>
-                    <option value="Ninguno">Ninguno</option>
+                    <select name="etnia" className={styles.select} value={formData.etnia ?? 'No se auto reconoce en ninguno de los anteriores'} onChange={handleChange}>
                     <option value="Afrocolombiano">Afrocolombiano</option>
-                    <option value="Indigena">Indigena</option>
-                    <option value="Raizal">Raizal</option>
+                    <option value="Comunidad negra">Comunidad negra</option>
+                    <option value="Indigena">Indígena</option>
+                    <option value="Palanquero">Palanquero</option>
+                    <option value="Raizal del archipielago de San Andres, Providencia y Santa Catalina">Raizal del archipiélago de San Andrés, Providencia y Santa Catalina</option>
+                    <option value="Rrom/gitano">Rrom/gitano</option>
+                    <option value="No se auto reconoce en ninguno de los anteriores">No se auto reconoce en ninguno de los anteriores</option>
                     </select>
                 </div>
                 <div className={styles.field}>
@@ -330,9 +382,71 @@ export default function FormularioSociocultural({ initialData = {} }: Props) {
                 </div>
                 </div>
 
-                {submitResult === 'success' && (
-                    <p className={styles.msgSuccess}>Registro guardado exitosamente.</p>
+                {/* CATEGORÍA 7: INFORMACIÓN FAMILIAR */}
+                <h2 className={styles.sectionTitle}>7. Información Familiar</h2>
+                <div className={styles.grid}>
+                <div className={styles.field}>
+                    <label>Nombre del Cónyuge</label>
+                    <input type="text" name="nombreConyugue" className={styles.input} value={formData.nombreConyugue ?? ''} onChange={handleChange} />
+                </div>
+                <div className={styles.field}>
+                    <label>Apellido del Cónyuge</label>
+                    <input type="text" name="apellidoConyugue" className={styles.input} value={formData.apellidoConyugue ?? ''} onChange={handleChange} />
+                </div>
+                <div className={styles.field}>
+                    <label>Teléfono del Cónyuge</label>
+                    <input type="tel" name="telefonoConyugue" className={styles.input} value={formData.telefonoConyugue ?? ''} onChange={handleChange} />
+                </div>
+                <div className={styles.field}>
+                    <label>Tiempo Conviviendo (años)</label>
+                    <input type="number" min="0" name="tiempoConviviendo" className={styles.input} value={formData.tiempoConviviendo ?? ''} onChange={handleChange} />
+                </div>
+                <div className={styles.field}>
+                    <label>¿Tiene Hijos?</label>
+                    <select name="tieneHijos" className={styles.select} value={formData.tieneHijos ?? 'No'} onChange={handleChange}>
+                    <option value="No">No</option>
+                    <option value="Si">Si</option>
+                    </select>
+                </div>
+                {formData.tieneHijos === 'Si' && (
+                <>
+                <div className={styles.field}>
+                    <label>¿Cuántos Hijos?</label>
+                    <input type="number" min="0" name="cuantosHijos" className={styles.input} value={formData.cuantosHijos ?? ''} onChange={handleChange} />
+                </div>
+                <div className={styles.field}>
+                    <label>Edad de los Hijos</label>
+                    <input type="text" name="edadHijos" className={styles.input} placeholder="Ej: 5, 8, 12" value={formData.edadHijos ?? ''} onChange={handleChange} />
+                </div>
+                </>
                 )}
+                </div>
+
+                {/* CATEGORÍA 8: DOTACIÓN */}
+                <h2 className={styles.sectionTitle}>8. Dotación</h2>
+                <div className={styles.grid}>
+                <div className={styles.field}>
+                    <label>Talla de Camisa</label>
+                    <select name="camisa" className={styles.select} value={formData.camisa ?? ''} onChange={handleChange}>
+                    <option value="">Seleccione...</option>
+                    <option value="XS">XS</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
+                    </select>
+                </div>
+                <div className={styles.field}>
+                    <label>Talla de Pantalón</label>
+                    <input type="text" name="pantalon" className={styles.input} placeholder="Ej: 34" value={formData.pantalon ?? ''} onChange={handleChange} />
+                </div>
+                <div className={styles.field}>
+                    <label>Talla de Calzado</label>
+                    <input type="text" name="calzado" className={styles.input} placeholder="Ej: 40" value={formData.calzado ?? ''} onChange={handleChange} />
+                </div>
+                </div>
+
                 {submitResult === 'error' && (
                     <p className={styles.msgError}>Ocurrió un error al guardar. Intente de nuevo.</p>
                 )}

@@ -30,7 +30,7 @@ export interface Personal {
   municipio?: string
   tipoVivienda?: string
   direccion?: string
-  strato?: string
+  estrato?: string
   personasACargo?: number
   vulnerabilidad?: string
   orientacionSexual?: string
@@ -41,4 +41,21 @@ export interface Personal {
   tieneVehiculo?: boolean
   estadoCivil?: string
   fecha_formulario_sociodemografico?: string
+
+  factor_vulnerabilidad: string
+  pertenencia_etnica: string
+
+  //informacion familiar
+  nombre_conyugue: string
+  apellido_conyugue: string
+  telefono_conyugue: string
+  tiempo_conviviendo: number
+  tiene_hijos: boolean
+  cuantos_hijos: number
+  edad_hijos: number[]
+
+  //dotacion
+  camisa: string
+  pantalon: string
+  calzado: string
 }
