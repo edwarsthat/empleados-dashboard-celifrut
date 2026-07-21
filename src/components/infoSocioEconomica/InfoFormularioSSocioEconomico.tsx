@@ -50,7 +50,7 @@ function buildInitialData(data: Personal): Record<string, string> {
     if (data.municipio)                   d.ciudad              = data.municipio;
     if (data.tipoVivienda)                d.tipoVivienda        = data.tipoVivienda;
     if (data.direccion)                   d.direccion           = data.direccion;
-    if (data.strato)                      d.estrato             = data.strato;
+    if (data.estrato)                     d.estrato             = data.estrato;
     if (data.personasACargo !== undefined) d.personasCargo      = mapPersonasCargoToForm(data.personasACargo);
     if (data.vulnerabilidad)              d.vulnerabilidad      = data.vulnerabilidad;
     if (data.orientacionSexual)           d.orientacion         = data.orientacionSexual;
@@ -117,7 +117,7 @@ export default function InfoSocioEconomica({ data }: Props) {
                 <Campo label="Municipio"          value={data.municipio} />
                 <Campo label="Tipo de Vivienda"   value={data.tipoVivienda} />
                 <Campo label="Barrio y Dirección" value={data.direccion} />
-                <Campo label="Estrato"            value={data.strato} />
+                <Campo label="Estrato"            value={data.estrato} />
             </div>
 
             {/* 5. Perfil Sociodemográfico */}

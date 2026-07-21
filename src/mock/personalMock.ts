@@ -32,7 +32,7 @@ export const personalMock: Personal = {
   municipio: 'Medellín',
   tipoVivienda: 'Arrendada',
   direccion: 'Barrio Belén, Cra 80 #30-15',
-  strato: '2',
+  estrato: '2',
   personasACargo: 2,
   vulnerabilidad: 'Ninguno',
   orientacionSexual: 'Heterosexual',
