@@ -43,7 +43,7 @@ jobs:
       # Sube dist/ como artefacto — el job deploy lo descarga.
       # Garantiza que el servidor recibe exactamente el mismo build que pasó CI.
       - name: Subir artefacto dist
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist/
